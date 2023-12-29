@@ -1,24 +1,30 @@
 #!/bin/sh
 
+# Define a function 'die' for displaying an error message and exiting the script with status code 1
 die () { echo "$@" ; exit 1; }
 
+# If using Zsh, set up command line aliases for common operations
 if [ -n "${ZSH_VERSION-}" ]; then
-  # these are set by omz: https://github.com/ohmyzsh/ohmyzsh/tree/1ac40cd4456230f09bf0258b173304929d118992/plugins/common-aliases
-  alias -g R='| less -S'
-  alias -g G='| less -S'
-  # these are set by yadr: https://github.com/skwp/dotfiles/blob/5c487de9b81cd4265ecc9df74477e410ffbda6a1/zsh/zsh-aliases.zsh
-  alias -g C='| wc -l'
-  alias -g H='| head'
-  alias -g L="| less"
-  alias -g N="| /dev/null"
-  alias -g S='| sort'
-  alias -g G='| grep'
+  # Aliases from ohmyzsh: https://github.com/ohmyzsh/ohmyzsh/tree/1ac40cd4456230f09bf0258b173304929d118992/plugins/common-aliases
+  alias -g R='| less -S'  # Pipe to less with horizontal scrolling
+  alias -g G='| grep'    # Pipe to grep
+  alias -g C='| wc -l'   # Pipe to word count with line count
+  alias -g H='| head'    # Pipe to head
+  alias -g L="| less"    # Pipe to less
+  alias -g N="| /dev/null"  # Pipe to /dev/null
+  alias -g S='| sort'    # Pipe to sort
+
+  # Aliases from yadr: https://github.com/skwp/dotfiles/blob/5c487de9b81cd4265ecc9df74477e410ffbda6a1/zsh/zsh-aliases.zsh
 fi
 
+# Attempt to source nvm.sh and capture the output
 OUTPUT=$(\. ../../nvm.sh || echo 'sourcing returned nonzero exit code')
 UNEXPECTED_OUTPUT="sourcing returned nonzero exit code"
+
+# Check for unexpected output after sourcing nvm.sh
 [ "_$OUTPUT" != "_$UNEXPECTED_OUTPUT" ] || die "Sourcing nvm.sh should not fail"
 
+# If using Zsh, remove previously set aliases to avoid conflicts
 if [ -n "${ZSH_VERSION-}" ]; then
   unalias \R
   unalias \G
